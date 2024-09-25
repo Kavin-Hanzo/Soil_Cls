@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sivakavin-soilclassifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .preview-image {
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .prediction-result {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .copyright{
+            color: #4caf50;
+            text-align: end;
+            font-size: small;
+        }
+        .ip{
+            background-color: rgba(165, 42, 42, 0.888);
+            color: #fff;
+            border-radius: 5px;
+        }
+        .ip:hover{
+            color: rgba(165, 42, 42, 0.842);
+            background-color: #fff;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Soil Class Prediction</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" id="fileInput" required>
+            <input type="submit" value="Check Soil Type" class="ip">
+        </form>
+
+        <!-- Image preview -->
+        <img id="preview" src="#" alt="Image Preview" class="preview-image" style="display: none;">
+        
+        <!-- Prediction result -->
+        <div id="prediction" class="prediction-result" style="display: none;"></div>
+        <div class="copyright"><p>@copyright Sivakavin</p></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('preview');
+        const predictionResult = document.getElementById('prediction');
+
+        // Preview the image before uploading
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    previewImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle form submission for prediction
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            fetch('/', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the prediction result
+                predictionResult.innerHTML = 'Your Soil Type: ' + data.prediction;
+                predictionResult.style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

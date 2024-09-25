@@ -1,0 +1,6 @@
+torch
+flask
+transformers
+torchvision
+Pillow
+scikit-learn
