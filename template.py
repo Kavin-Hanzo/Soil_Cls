@@ -1,7 +1,7 @@
 import os
 
 # Define the directory structure for the project
-PROJECT_NAME = "soil_tester_project"
+PROJECT_NAME = "Soil_Classification"
 
 structure = {
     f"{PROJECT_NAME}/": [
